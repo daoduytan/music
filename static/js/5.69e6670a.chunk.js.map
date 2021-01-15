@@ -1,0 +1,1 @@
+{"version":3,"sources":["pages/signin/signin.tsx"],"names":["Signin"],"mappings":"2JAIaA,G,KAAoB,WAC/B,OAAO,2CAGMA","file":"static/js/5.69e6670a.chunk.js","sourcesContent":["import React, { FC } from \"react\";\n\ninterface Props {}\n\nexport const Signin: FC<Props> = () => {\n  return <div>Signin</div>;\n};\n\nexport default Signin;\n"],"sourceRoot":""}
