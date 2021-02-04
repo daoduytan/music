@@ -51,4 +51,10 @@ const GET_MUSIC_SEARCH = gql`
   }
 `;
 
-export { MUSICS, SEARCH_MUSIC, GET_MUSIC_SEARCH, SAVE_MUSIC };
+const REMOVE_MUSIC = gql`
+  mutation RemoveMusic($id: String!) {
+    removeMusic(id: $id)
+  }
+`;
+
+export { MUSICS, SEARCH_MUSIC, GET_MUSIC_SEARCH, SAVE_MUSIC, REMOVE_MUSIC };

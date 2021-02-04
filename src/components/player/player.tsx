@@ -9,7 +9,7 @@ import { formatTime } from "./util";
 
 interface Props {}
 
-const HEIGHT = 100;
+const HEIGHT = 90;
 
 const Player: FC<Props> = () => {
   const audioRef = useRef<any>();
@@ -20,7 +20,7 @@ const Player: FC<Props> = () => {
   const { selectLink, audios, audio, link, selectAudio } = useAudio();
   const [isPlay, setIsPlay] = useState<boolean>(false);
 
-  const [musicSearchGet, { loading }] = useMutation(GET_MUSIC_SEARCH);
+  const [musicSearchGet] = useMutation(GET_MUSIC_SEARCH);
 
   useEffect(() => {
     if (link) {
@@ -108,12 +108,12 @@ const Player: FC<Props> = () => {
   return (
     <div
       style={{
-        background: "pink",
+        background: "#170f23",
       }}
     >
       <div
         className="container flex w-full flex-col px-4 items-center mx-auto"
-        style={{ height: HEIGHT }}
+        style={{ height: HEIGHT, color: "#fff" }}
       >
         <div className="flex items-center justify-center">
           <Play onClick={togglePlayMusic} isPlay={isPlay} />

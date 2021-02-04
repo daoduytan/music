@@ -1,7 +1,5 @@
-export interface ISong {
+import { IMusic } from "./music";
+
+export interface ISong extends IMusic {
   _id: string;
-  author: string;
-  title: string;
-  avatar: string;
-  link: string;
 }

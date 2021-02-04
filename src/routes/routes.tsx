@@ -1,7 +1,6 @@
 import { FC, lazy, Suspense } from "react";
-import { HashRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { NotFound, Player } from "../components";
-import { baseUrl } from "../constants";
 
 const Signin = lazy(() => import("../pages/signin/signin"));
 const Home = lazy(() => import("../pages/home/home"));
@@ -13,7 +12,7 @@ const Routes: FC<Props> = () => {
   return (
     <div className="flex flex-col h-screen" style={{ overflow: "hidden" }}>
       <div style={{ flex: 1, overflowY: "auto" }}>
-        <Router basename={baseUrl}>
+        <Router>
           <Suspense fallback={<div>Loading...</div>}>
             <Switch>
               <Route component={Home} path="/" exact />
