@@ -25,7 +25,7 @@ export const Home: FC<Props> = () => {
   }, [data]);
 
   if (loading) {
-    return <div>Loading</div>;
+    return <Loading full />;
   }
 
   if (error) {

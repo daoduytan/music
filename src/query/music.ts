@@ -8,6 +8,8 @@ const MUSICS = gql`
       title
       avatar
       link
+      fileUrl
+      exp
     }
   }
 `;
@@ -46,8 +48,8 @@ const SAVE_MUSIC = gql`
 `;
 
 const GET_MUSIC_SEARCH = gql`
-  mutation MusicSearchGet($link: String!) {
-    musicSearchGet(link: $link)
+  mutation MusicSearchGet($link: String!, $id: String) {
+    musicSearchGet(link: $link, id: $id)
   }
 `;
 

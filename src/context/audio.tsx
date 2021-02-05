@@ -6,6 +6,7 @@ import {
   useMemo,
   useReducer,
 } from "react";
+import { IMusic, ISong } from "../interface";
 
 interface IAction {
   type: string;
@@ -16,7 +17,10 @@ interface IState {
   audios: any[];
   audio?: string;
   link?: string;
+  _id?: string;
+  exp: number;
   loading: boolean;
+  song?: IMusic | ISong;
 }
 
 interface IContext {
@@ -28,13 +32,17 @@ const initialState = {
   audios: [],
   audio: undefined,
   link: undefined,
+  _id: undefined,
+  exp: 0,
   loading: false,
+  song: undefined,
 };
 
 const types = {
   ADD_AUDIOS: "add/audios",
   SELECT_AUDIO: "audio/select-audio",
   SELECT_LINK: "audio/select_link",
+  SELECT_SONG: "audio/select_song",
 };
 
 const reducer = (state: IState, action: IAction) => {
@@ -48,8 +56,15 @@ const reducer = (state: IState, action: IAction) => {
     case types.SELECT_LINK:
       return {
         ...state,
-        link: action.payload,
+        ...action.payload,
       };
+
+    case types.SELECT_SONG:
+      return {
+        ...state,
+        song: action.payload,
+      };
+
     case types.SELECT_AUDIO:
       return {
         ...state,
@@ -74,6 +89,7 @@ const ProviderAudioContext: FC<Props> = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const value = useMemo(() => ({ state, dispatch }), [state, dispatch]);
+
   return (
     <AudioContext.Provider value={value}>{children}</AudioContext.Provider>
   );
@@ -89,10 +105,21 @@ const useAudio = () => {
     });
   };
 
-  const selectLink = (link: string) => {
+  const selectLink = (payload: {
+    link: string;
+    _id?: string;
+    exp?: number;
+  }) => {
     dispatch({
       type: types.SELECT_LINK,
-      payload: link,
+      payload,
+    });
+  };
+
+  const selectSong = (song: ISong | IMusic) => {
+    dispatch({
+      type: types.SELECT_SONG,
+      payload: song,
     });
   };
 
@@ -108,6 +135,7 @@ const useAudio = () => {
     selectAudio,
     addAudio,
     selectLink,
+    selectSong,
   };
 };
 

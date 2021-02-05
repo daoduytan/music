@@ -1,9 +1,11 @@
 import { useMutation } from "@apollo/client";
+import get from "lodash/get";
 import React, { FC } from "react";
 import { useAudio } from "../../context";
-import { iconHeart } from "../../icon";
+import { iconHeart, iconDownload } from "../../icon";
 import { IMusic, ISong } from "../../interface";
-import { SAVE_MUSIC } from "../../query";
+import { SAVE_MUSIC, GET_MUSIC_SEARCH } from "../../query";
+import { checkExpFile } from "../../utils";
 import { Action } from "../action";
 import { Icon } from "../icon";
 
@@ -40,15 +42,44 @@ const Save: FC<ISaveProps> = ({ music }) => {
   );
 };
 
+const Download: FC<ISaveProps> = ({ music }) => {
+  const [musicSearchGet, { loading }] = useMutation(GET_MUSIC_SEARCH);
+
+  const downloadMusic = () => {
+    if (loading) {
+      return;
+    }
+
+    musicSearchGet({
+      variables: { link: music.link, id: get(music, "_id") },
+    }).then((res) => {
+      window.open(res.data.musicSearchGet, "_blank");
+    });
+  };
+  return (
+    <Icon size={25} onClick={downloadMusic}>
+      {iconDownload}
+    </Icon>
+  );
+};
+
 interface ISongProps {
   music: ISong | IMusic;
   hasSave?: boolean;
 }
 
 const Song: FC<ISongProps> = ({ music, hasSave = true }) => {
-  const { selectLink } = useAudio();
+  const { selectAudio, selectSong } = useAudio();
+
   const playMusic = () => {
-    selectLink(music.link);
+    const exp = get(music, "exp");
+    const fileUrl = get(music, "fileUrl");
+
+    selectSong(music);
+
+    if (exp && !checkExpFile(exp) && !!fileUrl) {
+      selectAudio(fileUrl);
+    }
   };
 
   return (
@@ -66,6 +97,10 @@ const Song: FC<ISongProps> = ({ music, hasSave = true }) => {
         </div>
       </div>
       <div className="flex px-2">
+        <span className="mr-4">
+          <Download music={music} />
+        </span>
+
         {hasSave ? <Save music={music} /> : <Action song={music} />}
       </div>
     </div>

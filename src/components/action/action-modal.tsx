@@ -1,10 +1,12 @@
+import get from "lodash/get";
 import { useMutation } from "@apollo/client";
-import React, { FC, useRef } from "react";
+import React, { FC } from "react";
 import { useAudio } from "../../context";
 import { iconClose, iconPlay } from "../../icon";
 import { IMusic, ISong } from "../../interface";
 import { REMOVE_MUSIC } from "../../query";
 import { Icon } from "../icon";
+import { checkExpFile } from "../../utils";
 
 interface Props {
   song: ISong | IMusic;
@@ -12,11 +14,19 @@ interface Props {
 }
 
 const ActionModal: FC<Props> = ({ song, toggle }) => {
-  const { selectLink } = useAudio();
+  const { selectLink, selectAudio } = useAudio();
   const [removeMusic, { loading }] = useMutation(REMOVE_MUSIC);
 
   const onPlay = () => {
-    selectLink(song.link);
+    const exp = get(song, "exp");
+    const fileUrl = get(song, "fileUrl");
+
+    if (exp && !checkExpFile(exp) && !!fileUrl) {
+      selectAudio(fileUrl);
+    } else {
+      selectLink({ link: song.link, _id: get(song, "_id") });
+    }
+
     toggle();
   };
 
@@ -50,8 +60,8 @@ const ActionModal: FC<Props> = ({ song, toggle }) => {
         </div>
       </div>
 
-      <div className="px-4 py-2">
-        <div className="flex items-center py-1 pl-3" onClick={onPlay}>
+      <div className="px-4 py-1">
+        <div className="flex items-center py-2 pl-3" onClick={onPlay}>
           <Icon>{iconPlay}</Icon>
           <span className="ml-4 font-semibold text-xs">Chơi bài hát</span>
         </div>
